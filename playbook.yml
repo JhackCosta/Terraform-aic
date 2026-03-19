@@ -6,3 +6,10 @@
       content: <h1>Feito com terraform e ansible</h1>
   - name: "criando o servidor" 
     shell: "nohup busybox http - f -p 8080 &"
+  - name: Instalando o python3, virtualenv
+    apt:
+      pkg:
+      - python3
+      - virtualenv
+      update_cache: yes
+    become: true
