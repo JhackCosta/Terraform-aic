@@ -4,8 +4,10 @@
     copy:
       dest: /home/ubuntu/index.html
       content: <h1>Feito com terraform e ansible</h1>
+
   - name: "criando o servidor" 
     shell: "nohup busybox http - f -p 8080 &"
+
   - name: Instalando o python3, virtualenv
     apt:
       pkg:
@@ -13,3 +15,20 @@
       - virtualenv
       update_cache: yes
     become: true
+
+  - name: Instalando dependencias com pip (Django e Django Rest)
+    pip:
+     virtualenv: /home/ubuntu/tcc/venv
+     name:
+     - django
+     - djangorestframework
+  
+  - name: Iniciando o projeto
+    shell: '. /home/ubuntu/tcc/venv/bin/activate; django-admin startproject setup /home/ubuntu/tcc/'
+
+  - name: Alterando os hosts do settings 
+    lineinfile:
+      path: /home/ubuntu/tcc/setup/settings.py
+      regexp: 'ALLOWED_HOSTS'
+      line: 'ALLOWED_HOSTS = ["*"]'
+      backrefs: yes
