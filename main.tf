@@ -17,6 +17,12 @@ resource "aws_instance" "app_server" {
   ami           = "ami-0b6c6ebed2801a5cb"
   instance_type = "t3.micro"
   key_name = "terraform-wsl"
+  user_data = <<-EOF
+                #!/bin/bash
+            cd /home/ubuntu
+            echo "<h1>Feito com Terraform</h1>" > index.html
+            nohup busybox httpd -f -p 8080 &
+                EOF
   tags = {
     Name = "Primeira estancia"
   }
